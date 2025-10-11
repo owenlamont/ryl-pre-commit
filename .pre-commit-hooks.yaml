@@ -1,0 +1,7 @@
+- id: ryl
+  name: ryl
+  description: "Lint YAML files with the ryl CLI"
+  entry: ryl
+  language: python
+  types: [yaml]
+  minimum_pre_commit_version: "2.9.2"
