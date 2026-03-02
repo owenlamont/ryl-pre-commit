@@ -32,6 +32,8 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Mirror latest ryl release
+        env:
+          DISPATCH_VERSION: ${{ github.event.client_payload.version }}
         run: uv run --no-project mirror.py
 
       - name: Check for unpushed commits
