@@ -41,10 +41,10 @@ repos:
           --force-exclude,
           # --write-changes (Don't use this to stop typos making auto-corrections)
         ]
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.37.1
+  - repo: https://github.com/owenlamont/ryl-pre-commit
+    rev: v0.3.5
     hooks:
-      - id: yamllint
+      - id: ryl
   - repo: https://github.com/woodruffw/zizmor-pre-commit
     rev: v1.14.2
     hooks:
