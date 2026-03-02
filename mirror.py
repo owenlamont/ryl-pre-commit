@@ -9,34 +9,48 @@
 
 from __future__ import annotations
 
-import re
-import subprocess
-import tomllib
+from collections.abc import Sequence
+import os
 from pathlib import Path
-from typing import Sequence
+import re
+import subprocess  # noqa: S404
+import time
 
-import urllib3
 from packaging.requirements import Requirement
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
+import tomllib
+import urllib3
 
 
 def main() -> None:
+    """Update this repository to track mirrored ryl releases."""
     pyproject = _load_pyproject()
     current_version = _current_ryl_version(pyproject)
-    for version in _available_versions():
+    dispatch_version = _dispatch_version()
+    if dispatch_version is not None:
+        if dispatch_version <= current_version:
+            print(
+                "Dispatch requested version"
+                f" {dispatch_version}, current is {current_version}; no change needed."
+            )
+            return
+        _wait_for_pypi_release(dispatch_version)
+        versions = [dispatch_version]
+    else:
+        versions = _available_versions()
+
+    for version in versions:
         if version <= current_version:
             continue
         changed_paths = _update_files(version)
-        if subprocess.check_output(["git", "status", "-s"]).strip():
-            subprocess.run(["git", "add", *changed_paths], check=True)
-            subprocess.run(["git", "commit", "-m", f"Mirror: {version}"], check=True)
-            subprocess.run(["git", "tag", f"v{version}"], check=True)
+        if _git_has_changes():
+            _git_commit_and_tag(version, changed_paths)
         else:
             print(f"No change v{version}")
 
 
 def _load_pyproject() -> dict:
-    with open(Path(__file__).parent / "pyproject.toml", "rb") as handle:
+    with Path(Path(__file__).parent / "pyproject.toml").open("rb") as handle:
         return tomllib.load(handle)
 
 
@@ -47,6 +61,58 @@ def _available_versions() -> list[Version]:
     releases = response.json()["releases"]
     versions = [Version(release) for release in releases]
     return sorted(versions)
+
+
+def _dispatch_version() -> Version | None:
+    raw = os.getenv("DISPATCH_VERSION", "").strip()
+    if not raw:
+        return None
+
+    normalized = raw.removeprefix("v")
+    try:
+        return Version(normalized)
+    except InvalidVersion as exc:
+        raise RuntimeError(f"Invalid DISPATCH_VERSION: {raw}") from exc
+
+
+def _git_has_changes() -> bool:
+    return bool(subprocess.check_output(["git", "status", "-s"]).strip())  # noqa: S607
+
+
+def _git_commit_and_tag(version: Version, changed_paths: Sequence[str]) -> None:
+    subprocess.run(["git", "add", *changed_paths], check=True)  # noqa: S603,S607
+    subprocess.run(  # noqa: S603
+        ["git", "commit", "-m", f"Mirror: {version}"],  # noqa: S607
+        check=True,
+    )
+    subprocess.run(["git", "tag", f"v{version}"], check=True)  # noqa: S603,S607
+
+
+def _wait_for_pypi_release(
+    version: Version, max_wait_seconds: int = 300, poll_interval_seconds: int = 15
+) -> None:
+    url = f"https://pypi.org/pypi/ryl/{version}/json"
+    elapsed = 0
+
+    while elapsed <= max_wait_seconds:
+        response = urllib3.request("GET", url)
+        if response.status == 200:
+            print(f"Version {version} is available on PyPI.")
+            return
+        if response.status != 404:
+            raise RuntimeError(
+                "Unexpected PyPI response while waiting for"
+                f" {version}: HTTP {response.status}"
+            )
+        if elapsed == max_wait_seconds:
+            break
+        print(f"Waiting for ryl {version} on PyPI ({elapsed}s/{max_wait_seconds}s)...")
+        time.sleep(poll_interval_seconds)
+        elapsed += poll_interval_seconds
+
+    raise RuntimeError(
+        f"Timed out waiting for ryl {version} on PyPI after {max_wait_seconds}s."
+    )
 
 
 def _current_ryl_version(pyproject: dict) -> Version:
