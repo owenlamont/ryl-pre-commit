@@ -60,13 +60,36 @@ jobs:
 
           git push origin HEAD:refs/heads/main --tags
 
-      - name: Create release
-        if: env.changes_exist == 'true'
+      - name: Reconcile releases from tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))
-          gh release create "$TAG_NAME" \
-            --title "$TAG_NAME" \
-            --notes "See: https://github.com/owenlamont/ryl/releases/tag/${TAG_NAME}" \
-            --latest
+          git fetch --tags origin
+
+          mapfile -t TAGS < <(git tag --list 'v*' --sort=v:refname)
+          if [ ${#TAGS[@]} -eq 0 ]; then
+            echo "No v* tags found; skipping release reconciliation."
+            exit 0
+          fi
+
+          LATEST_TAG="${TAGS[$((${#TAGS[@]} - 1))]}"
+          MISSING_RELEASES=0
+
+          for TAG_NAME in "${TAGS[@]}"; do
+            if gh release view "$TAG_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              continue
+            fi
+
+            echo "Creating missing release for $TAG_NAME"
+            MISSING_RELEASES=1
+            gh release create "$TAG_NAME" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$TAG_NAME" \
+              --notes "See: https://github.com/owenlamont/ryl/releases/tag/${TAG_NAME}"
+          done
+
+          if [ "$MISSING_RELEASES" -eq 0 ]; then
+            echo "No missing releases found."
+          fi
+
+          gh release edit "$LATEST_TAG" --repo "$GITHUB_REPOSITORY" --latest
