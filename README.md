@@ -14,7 +14,7 @@ Add the hook to your `.pre-commit-config.yaml`:
 repos:
   - repo: https://github.com/owenlamont/ryl-pre-commit
     # Match the latest ryl release tag.
-    rev: v0.5.0
+    rev: v0.6.0
     hooks:
       - id: ryl
 ```
@@ -24,7 +24,7 @@ custom configuration file:
 
 ```yaml
   - repo: https://github.com/owenlamont/ryl-pre-commit
-    rev: v0.5.0
+    rev: v0.6.0
     hooks:
       - id: ryl
         args: [--config-file, configs/yl.yml]
