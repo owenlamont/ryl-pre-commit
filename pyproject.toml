@@ -7,7 +7,7 @@ requires-python = ">=3.10"
 license = { file = "LICENSE" }
 keywords = ["yaml", "linter", "pre-commit", "rust"]
 dependencies = [
-    "ryl==0.9.0",
+    "ryl==0.9.1",
 ]
 
 [project.urls]
