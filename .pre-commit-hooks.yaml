@@ -5,3 +5,10 @@
   language: python
   types: [yaml]
   minimum_pre_commit_version: "2.9.2"
+- id: ryl-markdown
+  name: ryl (markdown)
+  description: "Lint YAML embedded in Markdown (front matter + fenced yaml blocks)"
+  entry: ryl --markdown
+  language: python
+  files: \.(md|markdown|mdx|qmd|Rmd)$
+  minimum_pre_commit_version: "2.9.2"
