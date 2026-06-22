@@ -34,7 +34,7 @@ custom configuration file:
 
 The `ryl` hook above only sees YAML files. To also lint YAML embedded in
 Markdown — front matter and fenced `yaml`/`yml` blocks — add the `ryl-markdown`
-hook, which runs `ryl --markdown` and so needs no extra `[files]` config:
+hook, which runs `ryl check --markdown` and so needs no extra `[files]` config:
 
 ```yaml
   - repo: https://github.com/owenlamont/ryl-pre-commit
