@@ -61,7 +61,6 @@ preview = true
 
 [lint.per-file-ignores]
 "tests/**" = ["D102", "D103", "S101"]
-"tests/uv_secure/package_info/test_dependency_file_parser.py" = ["E501"]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
