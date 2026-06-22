@@ -7,6 +7,10 @@ on:
   repository_dispatch:
     types: [pypi_release]
 
+concurrency:
+  group: mirror
+  cancel-in-progress: false
+
 permissions: {}
 
 jobs:
@@ -58,7 +62,7 @@ jobs:
             exit 0
           fi
 
-          git push origin HEAD:refs/heads/main --tags
+          git push --atomic origin HEAD:refs/heads/main --tags
 
       - name: Reconcile releases from tags
         env:
