@@ -13,28 +13,28 @@ repos:
       - id: no-commit-to-branch
       - id: pretty-format-json
         args: [--autofix]
-        exclude: '\.ipynb$'
+        exclude: \.ipynb$
       - id: mixed-line-ending
         args: [--fix=lf]
   - repo: https://github.com/rohaquinlop/complexipy-pre-commit
-    rev: v3.3.0
+    rev: v8.0.1
     hooks:
       - id: complexipy
   - repo: https://github.com/rvben/rumdl-pre-commit
-    rev: v0.0.155
+    rev: v0.2.79
     hooks:
       - id: rumdl
         args: [--fix]
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.14.0
+    rev: v0.17.1
     hooks:
       - id: ruff-check
-        args: [ --fix, --exit-non-zero-on-fix ]
-        types_or: [ python, pyi, jupyter ]
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi, jupyter]
       - id: ruff-format
         types_or: [python, pyi, jupyter]
   - repo: https://github.com/adhtruong/mirrors-typos
-    rev: v1.38.1
+    rev: v1.51.1
     hooks:
       - id: typos
         args: [
@@ -42,11 +42,12 @@ repos:
           # --write-changes (Don't use this to stop typos making auto-corrections)
         ]
   - repo: https://github.com/owenlamont/ryl-pre-commit
-    rev: v0.3.5
+    rev: v0.25.0
     hooks:
-      - id: ryl
+      - id: ryl-check
+      - id: ryl-format
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.14.2
+    rev: v1.31.1
     hooks:
-    - id: zizmor
-      args: [ --min-severity, low, --min-confidence, medium]
+      - id: zizmor
+        args: [--min-severity, low, --min-confidence, medium]
