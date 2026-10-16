@@ -1,13 +1,41 @@
+- id: ryl-check
+  name: ryl check
+  description: "Lint YAML files with ryl"
+  entry: ryl check
+  language: python
+  types: [yaml]
+  minimum_pre_commit_version: "2.9.2"
+- id: ryl-check-markdown
+  name: ryl check (markdown)
+  description: "Lint YAML embedded in Markdown (front matter + fenced yaml blocks)"
+  entry: ryl check --markdown
+  language: python
+  files: \.(md|markdown|mdx|qmd|Rmd)$
+  minimum_pre_commit_version: "2.9.2"
+- id: ryl-format
+  name: ryl format
+  description: "Format YAML files with ryl"
+  entry: ryl format
+  language: python
+  types: [yaml]
+  minimum_pre_commit_version: "2.9.2"
+- id: ryl-format-markdown
+  name: ryl format (markdown)
+  description: "Format YAML embedded in Markdown (front matter + fenced yaml blocks)"
+  entry: ryl format --markdown
+  language: python
+  files: \.(md|markdown|mdx|qmd|Rmd)$
+  minimum_pre_commit_version: "2.9.2"
 - id: ryl
-  name: ryl
-  description: "Lint YAML files with the ryl CLI"
+  name: ryl (legacy alias)
+  description: "Lint YAML files with ryl; prefer ryl-check"
   entry: ryl check
   language: python
   types: [yaml]
   minimum_pre_commit_version: "2.9.2"
 - id: ryl-markdown
-  name: ryl (markdown)
-  description: "Lint YAML embedded in Markdown (front matter + fenced yaml blocks)"
+  name: ryl (markdown, legacy alias)
+  description: "Lint YAML embedded in Markdown; prefer ryl-check-markdown"
   entry: ryl check --markdown
   language: python
   files: \.(md|markdown|mdx|qmd|Rmd)$

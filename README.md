@@ -1,14 +1,14 @@
 # ryl-pre-commit
 
 A [pre-commit](https://pre-commit.com/) hook for
-[ryl](https://github.com/owenlamont/ryl), the fast YAML linter written in Rust.
+[ryl](https://github.com/owenlamont/ryl), the fast YAML linter and formatter.
 
 Distributed as a standalone repository so that `ryl` releases published to
 [PyPI](https://pypi.org/project/ryl/) can be consumed directly by pre-commit.
 
 ## Usage
 
-Add the hook to your `.pre-commit-config.yaml`:
+Add the hooks to your `.pre-commit-config.yaml`:
 
 ```yaml
 repos:
@@ -16,43 +16,46 @@ repos:
     # Match the latest ryl release tag.
     rev: v0.25.0
     hooks:
-      - id: ryl
+      # Run the linter.
+      - id: ryl-check
+      # Run the formatter.
+      - id: ryl-format
 ```
 
-Pass additional CLI options through the `args` key, for example to point at a
-custom configuration file:
+To apply safe fixes, pass `--fix` to `ryl-check` and list it before
+`ryl-format`, since a fix can leave layout the formatter then changes:
 
 ```yaml
-  - repo: https://github.com/owenlamont/ryl-pre-commit
-    rev: v0.25.0
-    hooks:
-      - id: ryl
-        args: [--config-file, configs/yl.yml]
-```
-
-## Linting YAML embedded in Markdown
-
-The `ryl` hook above only sees YAML files. To also lint YAML embedded in
-Markdown — front matter and fenced `yaml`/`yml` blocks — add the `ryl-markdown`
-hook, which runs `ryl check --markdown` and so needs no extra `[files]` config:
-
-```yaml
-  - repo: https://github.com/owenlamont/ryl-pre-commit
-    rev: v0.25.0
-    hooks:
-      - id: ryl
-      - id: ryl-markdown
-```
-
-It targets `.md`, `.markdown`, `.mdx`, `.qmd`, and `.Rmd` files. To autofix the
-embedded YAML in place, add `args: [--fix]`:
-
-```yaml
-      - id: ryl-markdown
+      - id: ryl-check
         args: [--fix]
+      - id: ryl-format
 ```
 
-Requires `ryl >= 0.11.0`.
+Pass other CLI options through `args`, for example a custom configuration file:
+
+```yaml
+      - id: ryl-check
+        args: [--config-file, configs/ryl.toml]
+```
+
+The `ryl` id still runs `ryl check`, as a legacy alias for `ryl-check`.
+
+## YAML embedded in Markdown
+
+`ryl-check-markdown` and `ryl-format-markdown` lint and format front matter and
+fenced `yaml`/`yml` blocks in `.md`, `.markdown`, `.mdx`, `.qmd` and `.Rmd`
+files, with no extra `[files]` config:
+
+```yaml
+  - repo: https://github.com/owenlamont/ryl-pre-commit
+    rev: v0.25.0
+    hooks:
+      - id: ryl-check-markdown
+      - id: ryl-format-markdown
+```
+
+`ryl-markdown` remains as a legacy alias for `ryl-check-markdown`. The format
+hooks need `ryl >= 0.25.0`.
 
 ## License
 
