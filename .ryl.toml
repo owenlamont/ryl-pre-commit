@@ -1,0 +1,65 @@
+indent-width = 2
+
+[files]
+yaml = [
+    "*.yaml",
+    "*.yml",
+    ".yamllint",
+]
+
+[lint.rules]
+anchors = "enable"
+comments = "disable"
+comments-indentation = "disable"
+document-end = "disable"
+document-start = "disable"
+empty-values = "disable"
+float-values = "disable"
+key-duplicates = "enable"
+key-ordering = "disable"
+line-length = "disable"
+new-line-at-end-of-file = "enable"
+new-lines = "enable"
+octal-values = "disable"
+quoted-strings = "disable"
+trailing-spaces = "enable"
+truthy = "disable"
+
+[lint.rules.braces]
+level = "warning"
+max-spaces-inside = 1
+
+[lint.rules.brackets]
+level = "warning"
+max-spaces-inside = 1
+
+[lint.rules.colons]
+level = "warning"
+
+[lint.rules.commas]
+level = "warning"
+
+[lint.rules.empty-lines]
+level = "warning"
+
+[lint.rules.hyphens]
+level = "warning"
+
+[lint.rules.indentation]
+indent-sequences = "consistent"
+level = "warning"
+
+[format]
+quote-style = "single"
+line-ending = "lf"
+indent-sequences = true
+dash-on-own-line = false
+brace-spacing = true
+max-blank-lines = 1
+comment-spacing = 2
+comment-starting-space = "add"
+document-start = "preserve"
+document-end = "preserve"
+fold-long-lines = false
+sequence-style = "preserve"
+mapping-style = "preserve"

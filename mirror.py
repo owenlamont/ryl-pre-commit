@@ -13,7 +13,7 @@ from collections.abc import Sequence
 import os
 from pathlib import Path
 import re
-import subprocess  # noqa: S404
+import subprocess  # ruff: ignore[suspicious-subprocess-import]
 import time
 
 from packaging.requirements import Requirement
@@ -76,16 +76,16 @@ def _dispatch_version() -> Version | None:
 
 
 def _git_has_changes() -> bool:
-    return bool(subprocess.check_output(["git", "status", "-s"]).strip())  # noqa: S607
+    return bool(subprocess.check_output(["git", "status", "-s"]).strip())  # ruff: ignore[start-process-with-partial-path]
 
 
 def _git_commit_and_tag(version: Version, changed_paths: Sequence[str]) -> None:
-    subprocess.run(["git", "add", *changed_paths], check=True)  # noqa: S603,S607
-    subprocess.run(  # noqa: S603
-        ["git", "commit", "-m", f"Mirror: {version}"],  # noqa: S607
+    subprocess.run(["git", "add", *changed_paths], check=True)  # ruff: ignore[subprocess-without-shell-equals-true, start-process-with-partial-path]
+    subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        ["git", "commit", "-m", f"Mirror: {version}"],  # ruff: ignore[start-process-with-partial-path]
         check=True,
     )
-    subprocess.run(["git", "tag", f"v{version}"], check=True)  # noqa: S603,S607
+    subprocess.run(["git", "tag", f"v{version}"], check=True)  # ruff: ignore[subprocess-without-shell-equals-true, start-process-with-partial-path]
 
 
 def _wait_for_pypi_release(
