@@ -38,7 +38,8 @@ Pass other CLI options through `args`, for example a custom configuration file:
         args: [--config-file, configs/ryl.toml]
 ```
 
-The `ryl` id still runs `ryl check`, as a legacy alias for `ryl-check`.
+The legacy `ryl` id still runs `ryl check`, but prints a warning on every run
+naming `ryl-check` as its replacement.
 
 ## YAML embedded in Markdown
 
@@ -54,7 +55,8 @@ files, with no extra `[files]` config:
       - id: ryl-format-markdown
 ```
 
-`ryl-markdown` remains as a legacy alias for `ryl-check-markdown`. The format
+The legacy `ryl-markdown` id still runs `ryl check --markdown`, but prints a
+warning on every run naming `ryl-check-markdown` as its replacement. The format
 hooks need `ryl >= 0.25.0`.
 
 ## License

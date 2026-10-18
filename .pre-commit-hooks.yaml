@@ -29,14 +29,16 @@
 - id: ryl
   name: ryl (legacy alias)
   description: Lint YAML files with ryl; prefer ryl-check
-  entry: ryl check
+  entry: ryl-legacy-hook
   language: python
   types: [yaml]
+  verbose: true
   minimum_pre_commit_version: 2.9.2
 - id: ryl-markdown
   name: ryl (markdown, legacy alias)
   description: Lint YAML embedded in Markdown; prefer ryl-check-markdown
-  entry: ryl check --markdown
+  entry: ryl-legacy-markdown-hook
   language: python
   files: \.(md|markdown|mdx|qmd|Rmd)$
+  verbose: true
   minimum_pre_commit_version: 2.9.2
