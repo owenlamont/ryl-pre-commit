@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.13.1,<0.14"]
+build-backend = "uv_build"
 
 [project]
 name = "ryl-pre-commit"
@@ -15,11 +15,12 @@ dependencies = [
 ]
 
 [project.scripts]
-ryl-legacy-hook = "ryl_legacy_hook:_yaml"
-ryl-legacy-markdown-hook = "ryl_legacy_hook:_markdown"
+ryl-legacy-hook = "ryl_legacy_hook.hook:_yaml"
+ryl-legacy-markdown-hook = "ryl_legacy_hook.hook:_markdown"
 
-[tool.setuptools]
-py-modules = ["ryl_legacy_hook"]
+[tool.uv.build-backend]
+module-name = "ryl_legacy_hook"
+module-root = ""
 
 [project.urls]
 Homepage = "https://github.com/owenlamont/ryl"
