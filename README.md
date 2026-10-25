@@ -14,7 +14,7 @@ Add the hooks to your `.pre-commit-config.yaml`:
 repos:
   - repo: https://github.com/owenlamont/ryl-pre-commit
     # Match the latest ryl release tag.
-    rev: v0.26.0
+    rev: v0.26.1
     hooks:
       # Run the linter.
       - id: ryl-check
@@ -49,7 +49,7 @@ files, with no extra `[files]` config:
 
 ```yaml
   - repo: https://github.com/owenlamont/ryl-pre-commit
-    rev: v0.26.0
+    rev: v0.26.1
     hooks:
       - id: ryl-check-markdown
       - id: ryl-format-markdown
